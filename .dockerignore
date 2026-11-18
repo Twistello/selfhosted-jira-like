@@ -1,0 +1,10 @@
+node_modules
+.git
+.env
+.runtime
+.superpowers
+.worktrees
+test-results
+playwright-report
+dist
+*.log
