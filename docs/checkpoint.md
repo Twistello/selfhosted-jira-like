@@ -54,4 +54,6 @@ Ruling: user explicitly opts out of intermediate design approval; proceed with g
 
 ### Поставка
 
-Source/docs подготовлены для коммита и разрешённого push. Изначальный remote пуст: для draft PR начальный documentation commit используется как base `main`, реализация остаётся в feature branch. Force-push/merge/корпоративный deployment не выполнять. Фактические remote SHA/PR/CI результаты будут дополнены после отправки.
+Source commit `58534f2831b3787f564933b2f3dc323bb1615276` отправлен и подтверждён `git ls-remote`. Репозиторий: https://github.com/Twistello/selfhosted-jira-like . Ветка: `feat/selfhosted-platform`. Draft PR: https://github.com/Twistello/selfhosted-jira-like/pull/1 . В изначально пустом remote initial docs commit `9b2216d64e0a17d9aa22c9aa43d348a7f46e00a1` стал base `main`; продукт остаётся в feature branch. PR не слит, corporate deployment не выполнялся.
+
+CI source commit: https://github.com/Twistello/selfhosted-jira-like/actions/runs/44295971275 . На момент записи выполняется; локальные результаты не подменяют результат Actions. Следующий documentation-only commit обновляет этот checkpoint без изменения проверенного runtime-кода. Итог CI нужно читать по указанному run и зафиксировать при продолжении, если он ещё не завершён.
