@@ -18,7 +18,7 @@ DATABASE_URL=postgresql://user:password@host:5432/restore_db npm run restore -- 
 
 Нужны `pg_dump`/`pg_restore` в PATH либо `PG_BIN` с каталогом PostgreSQL. В PowerShell переменные окружения задаются через `$env:DATABASE_URL`. Restore отказывается работать, если в БД уже есть таблицы; он не удаляет рабочие данные. Запускайте приложение с исходным ключом шифрования. Реальная проверка pg_dump → чистая БД → сравнение пользователей/версий/событий включена в `tests/ops.integration.test.ts`. Процедура восстановления HTTPS и внешних файлов не проверена и не реализована.
 
-В Compose используйте PostgreSQL client tools той же или более новой версии. Пример экспорта без публикации БД: `docker compose exec db pg_dump -U forgeboard -d forgeboard -Fc -f /tmp/backup.dump`, затем `docker compose cp db:/tmp/backup.dump /secure/backups/forgeboard.dump`. Команды не выполнялись в этом окружении.
+Используйте PostgreSQL client tools той же major версии, что сервер. CI выявил, что более новый pg_restore может добавить `SET transaction_timeout`, который PostgreSQL15 не понимает. CI использует клиент из `postgres:15-alpine` через явные wrappers. Пример экспорта без публикации БД: `docker compose exec db pg_dump -U forgeboard -d forgeboard -Fc -f /tmp/backup.dump`, затем `docker compose cp db:/tmp/backup.dump /secure/backups/forgeboard.dump`. Команды Compose не выполнялись локально.
 
 ## Обновления
 

@@ -29,7 +29,21 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Ephemeral encryption key
-        run: echo "APP_ENCRYPTION_KEY=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64'))")" >> "$GITHUB_ENV"
+        run: |
+          task_key=$(node -e "console.log(require('crypto').randomBytes(32).toString('base64'))")
+          echo "::add-mask::$task_key"
+          echo "APP_ENCRYPTION_KEY=$task_key" >> "$GITHUB_ENV"
+      - name: PostgreSQL 15 backup clients
+        run: |
+          mkdir -p "$RUNNER_TEMP/pg15"
+          for tool in pg_dump pg_restore; do
+            cat > "$RUNNER_TEMP/pg15/$tool" <<EOF
+          #!/usr/bin/env bash
+          exec docker run --rm --network host -e PGHOST -e PGPORT -e PGUSER -e PGPASSWORD -e PGDATABASE -v /tmp:/tmp postgres:15-alpine $tool "\$@"
+          EOF
+            chmod +x "$RUNNER_TEMP/pg15/$tool"
+          done
+          echo "PG_BIN=$RUNNER_TEMP/pg15" >> "$GITHUB_ENV"
       - run: npm run check:secrets
       - run: npm run migrate
       - run: npm run migrate
